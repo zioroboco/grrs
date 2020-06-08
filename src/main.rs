@@ -1,3 +1,7 @@
+use std::fs::File;
+use std::io::prelude::*;
+use std::io::BufReader;
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 /// Display any lines in a file matching a pattern
@@ -6,15 +10,19 @@ struct Cli {
     /// Target pattern
     pattern: String,
     /// Path to file
-    path: std::path::PathBuf,
+    path: PathBuf,
 }
 
 fn main() {
     let args = Cli::from_args();
-    let content = std::fs::read_to_string(&args.path).expect("could not read file");
-    for line in content.lines() {
-        if line.contains(&args.pattern) {
-            println!("{}", line);
+
+    let file = File::open(&args.path).expect("could not open file");
+    let reader = BufReader::new(file);
+
+    for line in reader.lines() {
+        let content = line.expect("line could not be read");
+        if content.contains(&args.pattern) {
+            println!("{}", content);
         }
     }
 }
