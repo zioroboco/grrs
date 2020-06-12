@@ -9,14 +9,14 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Cli::from_args();
     let result = std::fs::read_to_string(&args.path);
 
     let content = match result {
         Ok(content) => content,
         Err(error) => {
-            panic!("Uh oh: {}", error);
+            return Err(error.into());
         }
     };
 
@@ -25,4 +25,6 @@ fn main() {
             println!("{}", line);
         }
     }
+
+    Ok(())
 }
