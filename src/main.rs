@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -14,14 +13,19 @@ struct Cli {
     path: PathBuf,
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[derive(Debug)]
+struct CustomError(String);
+
+fn main() -> Result<(), CustomError> {
     let args = Cli::from_args();
 
-    let file = File::open(&args.path)?;
+    let file = File::open(&args.path)
+        .map_err(|err| CustomError(format!("Error reading `{:?}`: {}", args.path, err)))?;
+
     let reader = BufReader::new(file);
 
     for line in reader.lines() {
-        let content = line?;
+        let content = line.unwrap();
         if content.contains(&args.pattern) {
             println!("{}", content);
         }
