@@ -1,8 +1,7 @@
 use exitfailure::ExitFailure;
 use failure::ResultExt;
 use std::fs::File;
-use std::io::prelude::*;
-use std::io::BufReader;
+use std::io::{self, prelude::*, BufReader, BufWriter, Write};
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -22,13 +21,18 @@ fn main() -> Result<(), ExitFailure> {
         File::open(&args.path).with_context(|_| format!("Could not read file {:?}", args.path))?;
 
     let reader = BufReader::new(file);
+    let mut writer = BufWriter::new(io::stdout());
 
     for line in reader.lines() {
-        let content = line.unwrap();
+        let content =
+            line.with_context(|_| format!("Could not read line in file {:?}", args.path))?;
+
         if content.contains(&args.pattern) {
-            println!("{}", content);
+            writeln!(&mut writer, "{}", content)?;
         }
     }
+
+    &mut writer.flush();
 
     Ok(())
 }
