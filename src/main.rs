@@ -1,3 +1,5 @@
+use exitfailure::ExitFailure;
+use failure::ResultExt;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -13,14 +15,11 @@ struct Cli {
     path: PathBuf,
 }
 
-#[derive(Debug)]
-struct CustomError(String);
-
-fn main() -> Result<(), CustomError> {
+fn main() -> Result<(), ExitFailure> {
     let args = Cli::from_args();
 
-    let file = File::open(&args.path)
-        .map_err(|err| CustomError(format!("Error reading `{:?}`: {}", args.path, err)))?;
+    let file =
+        File::open(&args.path).with_context(|_| format!("Could not read file {:?}", args.path))?;
 
     let reader = BufReader::new(file);
 
