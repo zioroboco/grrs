@@ -1,3 +1,5 @@
+use exitfailure::ExitFailure;
+use failure::ResultExt;
 use structopt::StructOpt;
 
 /// Display any lines in a file matching a pattern
@@ -9,13 +11,10 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-#[derive(Debug)]
-struct CustomError(String);
-
-fn main() -> Result<(), CustomError> {
+fn main() -> Result<(), ExitFailure> {
     let args = Cli::from_args();
     let content = std::fs::read_to_string(&args.path)
-        .map_err(|err| CustomError(format!("Error reading {:?}: {}", args.path, err)))?;
+        .with_context(|_| format!("Could not read file {:?}", args.path))?;
 
     for line in content.lines() {
         if line.contains(&args.pattern) {
