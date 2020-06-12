@@ -9,9 +9,13 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+#[derive(Debug)]
+struct CustomError(String);
+
+fn main() -> Result<(), CustomError> {
     let args = Cli::from_args();
-    let content = std::fs::read_to_string(&args.path)?;
+    let content = std::fs::read_to_string(&args.path)
+        .map_err(|err| CustomError(format!("Error reading {:?}: {}", args.path, err)))?;
 
     for line in content.lines() {
         if line.contains(&args.pattern) {
