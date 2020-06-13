@@ -7,4 +7,6 @@ version = "0.1.0"
 [dependencies]
 exitfailure = "0.5.1"
 failure = "0.1.8"
+log = "0.4.8"
+simplelog = "0.8.0"
 structopt = "0.3.14"
