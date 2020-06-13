@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "[failure Cargo.toml]",
+      "cargo": {
+        "args": ["build", "--bin=grrs", "--package=grrs"],
+        "filter": {
+          "name": "grrs",
+          "kind": "bin"
+        }
+      },
+      "args": ["failure", "Cargo.toml"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tests",
+      "cargo": {
+        "args": ["test", "--no-run", "--bin=grrs", "--package=grrs"],
+        "filter": {
+          "name": "grrs",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
