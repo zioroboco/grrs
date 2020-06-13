@@ -31,3 +31,16 @@ fn find_content_in_file() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+#[test]
+fn empty_pattern_matches_nothing() -> Result<(), Box<dyn Error>> {
+    let mut cmd = Command::cargo_bin("grrs")?;
+
+    let mut file = NamedTempFile::new()?;
+    writeln!(file, "one\ntwo\nthree\nfour\n")?;
+
+    cmd.arg("").arg(file.path());
+    cmd.assert().success().stdout(predicate::str::is_empty());
+
+    Ok(())
+}

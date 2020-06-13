@@ -39,6 +39,11 @@ fn main() -> Result<(), ExitFailure> {
         format!("Could not read file {:?}", args.path)
     })?;
 
+    if &args.pattern == "" {
+        trace!("Pattern empty, return no lines");
+        return Ok(());
+    }
+
     trace!("Setting up input buffer");
     let reader = BufReader::new(file);
 
