@@ -50,11 +50,9 @@ fn main() -> Result<(), ExitFailure> {
             error!("{}", e);
             format!("Could not read line in file {:?}", args.path)
         })?;
-
-        trace!("Checking `{}` for pattern `{}`", content, &args.pattern);
-        if content.contains(&args.pattern) {
+        if matches(&content, &args.pattern) {
             trace!("Writing `{}` to output buffer", content);
-            writeln!(&mut writer, "{}", content)?;
+            writeln!(&mut writer, "{}", &content)?;
         }
     }
 
@@ -64,4 +62,18 @@ fn main() -> Result<(), ExitFailure> {
     info!("Done");
 
     Ok(())
+}
+
+fn matches(content: &str, pattern: &str) -> bool {
+    content.contains(pattern)
+}
+
+#[test]
+fn check_matching() {
+    assert!(matches("lorem ipsum", "lorem"));
+}
+
+#[test]
+fn check_not_matching() {
+    assert!(!matches("lorem ipsum", "dolor"));
 }
