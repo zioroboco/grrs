@@ -18,12 +18,40 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Tests",
+      "name": "test: src/bin",
       "cargo": {
         "args": ["test", "--no-run", "--bin=grrs", "--package=grrs"],
         "filter": {
           "name": "grrs",
           "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "test: src/lib",
+      "cargo": {
+        "args": ["test", "--no-run", "--package=grrs"],
+        "filter": {
+          "name": "lib",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "test: tests/cli",
+      "cargo": {
+        "args": ["test", "--no-run", "--package=grrs"],
+        "filter": {
+          "name": "cli",
+          "kind": "test"
         }
       },
       "args": [],

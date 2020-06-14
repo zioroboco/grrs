@@ -1,3 +1,5 @@
+use lib::*;
+
 use exitfailure::ExitFailure;
 use failure::ResultExt;
 use log::*;
@@ -57,7 +59,7 @@ fn main() -> Result<(), ExitFailure> {
         })?;
 
         trace!("Checking `{}` for pattern `{}`", content, &args.pattern);
-        if content.contains(&args.pattern) {
+        if matches(&args.pattern, &content) {
             trace!("Writing `{}` to output buffer", content);
             writeln!(&mut writer, "{}", content)?;
         }

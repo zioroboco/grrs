@@ -4,6 +4,14 @@ edition = "2018"
 name    = "grrs"
 version = "0.1.0"
 
+[[bin]]
+name = "grrs"
+path = "src/main.rs"
+
+[lib]
+name = "lib"
+path = "src/lib.rs"
+
 [dependencies]
 exitfailure = "0.5.1"
 failure = "0.1.8"
